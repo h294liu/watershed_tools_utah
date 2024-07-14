@@ -41,15 +41,15 @@ def calculate_Sw(latitude, elev, slope, aspect, DOY):
     # Sw_rad = np.empty_like(elev)
     declin    = (23.45*np.pi/180.0)*np.sin(2*np.pi*((284+DOY)/365.0))   # Earth's declination [rad]
     d_squared = 1/(1+0.033*np.cos(DOY*2*np.pi/365))                     # Eqn 2, earth sun distance
-    a         = np.sin(declin) * np.cos(latitude) * np.sin(slope) * np.cos(aspect) -
+    a         = np.sin(declin) * np.cos(latitude) * np.sin(slope) * np.cos(aspect) - \
                   np.sin(declin) * np.sin(latitude) * np.cos(slope)     # Eqn 11a, constant
-    b         = np.cos(declin) * np.cos(latitude) * np.cos(slope) +
+    b         = np.cos(declin) * np.cos(latitude) * np.cos(slope) + \
                   np.cos(declin) * np.sin(latitude) * np.sin(slope) * np.cos(aspect) # Eqn 11b, constant                                 
     c = np.cos(declin) * np.sin(slope) * np.sin(aspect)                 # Eqn 11c, constant
     S = 1367                                                            # Solar constant[W/m2]
 
     # set INTEGRATION LIMITS (SUNRISE/SUNSET)
-    print('INTEGRATION LIMITS')
+    print('calculate integrate limits')
     # Calculate Integration Limits for extraterrestrial radiation (KET)
     # Step A.1. - Calculate Sunrise/Sunset for Horizontal Slope - not considering double sunrise situations
     ws2 = np.arccos(-1*np.tan(declin) * np.tan(latitude))                # Eqn 8, Sunset [rad]
@@ -112,7 +112,7 @@ def calculate_Sw(latitude, elev, slope, aspect, DOY):
     # -----------------------------------------------------------------------------------------------------------------
     # CALCULATE EXTRATERRESTRIAL RADIATION
     # -----------------------------------------------------------------------------------------------------------------
-    print('CALCULATE EXTRATERRESTRIAL RADIATION')
+    print('calculate extraterrestrial radiation')
     #Find cos(theta)
     #Only one sunrise/sunset, integrated between w1_24 and w2_24
     cos_theta = np.sin(declin) * np.sin(latitude) * np.cos(slope) * (w2_24 - w1_24) -\
@@ -128,7 +128,7 @@ def calculate_Sw(latitude, elev, slope, aspect, DOY):
     # -----------------------------------------------------------------------------------------------------------------
     # CLEAR SKY SOLAR RADIATION
     # -----------------------------------------------------------------------------------------------------------------
-    print('CLEAR SKY SOLAR RADIATION')
+    print('calculate clear sky radiation')
     # Calculate various parameters for transmissivity
     e = 0.6108 * np.exp(17.27 * AirTemp / (AirTemp + 237.3)) * RH     # Vapor Pressure as per ASCE_EWRI (2005) [kPa]. Eqn 7.
     P = 101.3 * ((293 - 0.0065 * elev) / 293)**5.36                   # Atmospheric Pressure as per ASCE-EWRI (2005) [kPa]. Eqn 34.

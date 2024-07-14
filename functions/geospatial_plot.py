@@ -45,7 +45,7 @@ def plot_gru_bound(gru_shp,stream_shp,wgs_crs,title,ofile):
 
     ax.set_xlabel('Longitude')
     ax.set_ylabel('Latitude')
-    ax.legend(loc='best', framealpha=0.6, facecolor=None)
+    ax.legend(loc='lower right', framealpha=0.6, facecolor=None)
     fig.savefig(ofile, bbox_inches='tight',dpi=150)    
     plt.show()   
 
@@ -156,8 +156,8 @@ def plot_hru(level_str, hru_shp, gru_shp, stream_shp, wgs_crs, fieldname_list, c
         if cmap_str!='user':
             step   = 1/float(len(data_unique)-1)
             vals   = np.arange(0,1+step,step)
-            colors =  mpl.cm.get_cmap(cmap_str)
-            cols   = colors(vals)
+            colors_cmap =  mpl.cm.get_cmap(cmap_str)
+            cols   = colors_cmap(vals)
 
             legend_labels = {}
             count_record = []
@@ -172,13 +172,13 @@ def plot_hru(level_str, hru_shp, gru_shp, stream_shp, wgs_crs, fieldname_list, c
 
             legend_labels = {} # used to create legend
             count_record = []  # usde to record class count
-            colors = []        # used to create cmap
+            colors_list = []        # used to create cmap
             for data_i in data_unique:
                 data_i_color = input_dict[data_i][0] #cols[np.where(unique==data_i)]
                 data_i_label = input_dict[data_i][1]
                 legend_labels[data_i]=[data_i_color,data_i_label]
                 count_record.append([data_i,data_i_label,int(data_counts[data_unique==data_i])])
-                colors.append(data_i_color)
+                colors_list.append(data_i_color)
 
     # 3 plot 
     fig, ax = plt.subplots(figsize=figsize, constrained_layout=True)
@@ -295,8 +295,8 @@ def plot_raster(inraster,wgs_crs,cmap_str,input_dict,
     if cmap_str!='user':
         step = 1/float(len(data_unique)-1)
         vals = np.arange(0,1+step,step)
-        colors =  mpl.cm.get_cmap(cmap_str)
-        cols = colors(vals)
+        colors_cmap =  mpl.cm.get_cmap(cmap_str)
+        cols = colors_cmap(vals)
         cmap = mpl.colors.ListedColormap(cols, int(data_unique.max())+1)
 
         legend_labels = {}
@@ -312,14 +312,14 @@ def plot_raster(inraster,wgs_crs,cmap_str,input_dict,
 
         legend_labels = {} # used to create legend
         count_record = []  # usde to record class count
-        colors = []        # used to create cmap
+        colors_list = []        # used to create cmap
         for data_i in data_unique:
             data_i_color = input_dict[data_i][0] 
             data_i_label = input_dict[data_i][1]
             legend_labels[data_i]=[data_i_color,data_i_label]
             count_record.append([data_i,data_i_label,int(data_counts[data_unique==data_i])])
-            colors.append(data_i_color)
-        cmap = ListedColormap(colors, len(data_unique)) # generate your own cmap    
+            colors_list.append(data_i_color)
+        cmap = ListedColormap(colors_list, len(data_unique)) # generate your own cmap    
     print(legend_labels)
 
     ## Part 2. plot
@@ -417,8 +417,8 @@ def plot_raster_and_bound_stream(inraster,gru_shp,stream_shp,wgs_crs,cmap_str,in
     # method 1. use user-specified cmap
     if cmap_str != 'user':
         vals = np.arange(len(data_unique)+1)/float(len(data_unique))
-        colors =  mpl.cm.get_cmap(cmap_str)
-        cols = colors(vals)
+        colors_cmap =  mpl.cm.get_cmap(cmap_str)
+        cols = colors_cmap(vals)
         cmap = mpl.colors.ListedColormap(cols, int(data_unique.max())+1)
 
         legend_labels = {}
@@ -436,15 +436,15 @@ def plot_raster_and_bound_stream(inraster,gru_shp,stream_shp,wgs_crs,cmap_str,in
 
         legend_labels = {} # used to create legend
         count_record = []  # usde to record class count
-        colors       = []  # used to create cmap
+        colors_list  = []  # used to create cmap
         for data_i in data_unique:
             data_i_color = input_dict[data_i][0] #cols[np.where(unique==data_i)]
             data_i_label = input_dict[data_i][1]
             legend_labels[data_i] = [data_i_color, data_i_label]
             count_record.append([data_i, data_i_label, int(data_counts[data_unique==data_i])])
-            colors.append(data_i_color)
+            colors_list.append(data_i_color)
                        
-        cmap = ListedColormap(colors, len(data_unique)) # create color legend from values present in the raster  
+        cmap = ListedColormap(colors_list, len(data_unique)) # create color legend from values present in the raster  
         
         print('legend_labels:', legend_labels)
  

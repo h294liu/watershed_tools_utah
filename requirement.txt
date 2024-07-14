@@ -1,0 +1,10 @@
+numpy
+geopandas
+rasterio
+matplotlib
+pandas
+shapely
+scipy
+tqdm
+argparse
+pyproj

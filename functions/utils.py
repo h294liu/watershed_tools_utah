@@ -31,30 +31,24 @@ def read_from_control(control_file, setting):
 def set_filename(control_file, setting):
     fileName        = read_from_control(control_file, setting)
     basin_data_path = read_from_control(control_file, 'basin_data_path')
-    gis_path        = basin_data_path + 'gis/'
+    gis_path        = basin_data_path + 'gis'
 
-    # files in main basin_data directory
-    if setting in ['basin_gruId_txt', 'basin_gruNo_gruId_txt' ]:
-        fileName = basin_data_path + fileName
-
-    # files in GIS directory
-    elif setting in ['basin_gru_shp', 'basin_gru_raster', 'basin_dem_raster', 'basin_slope_raster',  
-                     'basin_aspect_raster', 'basin_soiltype_raster', 'basin_radiation_raster',  
-                     'basin_landcover_raster', 'basin_landcover_resample_raster', 'refraster', 
-                     'basin_canopy_class_raster', 'canopy_class.tif', 'basin_flowlines_shp' ]:
-        
-        # special case for refraster
-        if setting == 'refraster' and fileName == 'default':
-            fileName = read_from_control(control_file, 'basin_dem_raster')
-
-        # special case for basin_gru_shp
-        if setting == 'basin_gru_shp' and fileName == 'default':
-            fileName = 'gru.shp'     # create this file rather than read it
-
-        fileName = gis_path + fileName
-                   
+    if not os.path.isabs(fileName):
+        # files in main basin_data directory
+        if setting in ['basin_gruId_txt', 'basin_gruNo_gruId_txt' ]:
+            fileName = basin_data_path + fileName
+        # files in GIS directory
+        else:
+            # special case for refraster
+            if setting == 'refraster' and fileName == 'default':
+                fileName = read_from_control(control_file, 'basin_dem_raster')
+            # special case for basin_gru_shp
+            if setting == 'basin_gru_shp' and fileName == 'default':
+                fileName = 'gru.shp'     # create this file rather than read it        
+            fileName = os.path.join(gis_path, fileName)                   
+        # else:
+        #     print('utility set_filename() not successful for file ', setting)
+        #     print('STOP')     # warning in jupyter notebook; use exit() in normal script
     else:
-        print('utility set_filename() not successful for file ', setting)
-        print('STOP')     # warning in jupyter notebook; use exit() in normal script
-            
+        fileName = fileName  
     return fileName
